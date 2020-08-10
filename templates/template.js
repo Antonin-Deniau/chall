@@ -1,9 +1,11 @@
-let [a, i, x]=[STRING_TO_REPLACE, 0, [
+a=STRING_TO_REPLACE;
+i=0;
+x=[
 	x=>alert`BadPass.`,
 	x=>x.push(...prompt().split`,`.map(x=>+x)),
 	x=>x[50]=8,
 	x=>alert`Good pass !`,
-]];
+];
 
 while(a[50]!=8){
     console.log(a[i], a[i+1], a[i+2]); // TODO remove
