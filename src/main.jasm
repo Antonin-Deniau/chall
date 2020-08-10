@@ -1,0 +1,32 @@
+int 1 ; get password
+set :counter: 0
+
+check_loop:
+    ; SET TWO CHARS (encoded and input)
+    incr_1: mov :cmp_a: :encoded:
+    incr_2: mov :cmp_b: 51
+
+    ; SET NEXT CHAR
+    inc :incr_1: + 2
+    inc :incr_2: + 2
+
+    ; IF END OF PASS JMP TO VALID
+    test :counter: :passlen:
+    jmp :valid:
+
+    ; IF TWO CHAR VALID CONTINUE LOOP
+    test :cmp_a: :cmp_b:
+    ;jeq :check_loop:
+
+    ; IF NOT VALID EXIT
+    int 0
+
+exit: int 2
+valid: int 3
+
+; VARS
+encoded: data 1 2 3 4
+passlen: data 20
+counter: data 0
+cmp_a: data 0
+cmp_b: data 0

@@ -1,0 +1,114 @@
+#!/usr/bin/env python
+import json, re, sys
+from lark import Lark, Transformer, Token
+
+rawdata = open(sys.argv[1], "r").read()
+
+rules=r'''
+    lines: line*
+    line: label? operation? COMMENT? "\n"
+    label: LABELNAME ":"
+    operation: opcode data*
+    ?data: numeral
+         | pointer
+    pointer: ":" POINTERADDR ":" ["+" OFFSET]
+    POINTERADDR: /[A-z0-9_]+/
+    OFFSET: INT
+    numeral: INT
+    opcode: /[a-z]+/
+    LABELNAME: /[A-z0-9_]+(?=:)/
+    COMMENT: /;.*/
+    %import common.INT
+    %import common.WS_INLINE
+    %ignore WS_INLINE
+    %ignore COMMENT
+'''
+
+l = Lark(rules, parser='lalr', start="lines")
+
+class ToAst(Transformer):
+    def pointer(self, x):
+        return {
+            "type": "pointer",
+            "label": x[0].value,
+            "offset": int(x[1].value) if len(x) == 2 else 0,
+        }
+
+    line = list
+    lines = list
+    label = lambda _, x: { "type": "label", "value": x[0].value }
+    operation = lambda self, x: { "type": "operation", "op": x[0], "value": x[1::] }
+    opcode = lambda self, x: x[0].value
+    numeral = lambda self, x: { "type": "numeral", "value": int(x[0].value) }
+
+tree = l.parse(rawdata)
+lines = ToAst().transform(tree)
+
+"""
+jeq <addr> TEST [47]
+xor <a> <b> TO [48]
+int <num>
+test <a> <b> TO [47]
+mov <a> <b>
+inc <a>
+set <a> <b>
+jmp <a>
+"""
+
+table = {
+    "jeq": 1,
+    "xor": 3,
+    "int": 2,
+    "test": 8,
+    "mov": 4,
+    "inc": 5,
+    "set": 6,
+    "jmp": 7,
+}
+
+size = {
+    "jeq": 2,
+    "xor": 3,
+    "int": 2,
+    "test": 3,
+    "mov": 3,
+    "inc": 2,
+    "set": 3,
+    "jmp": 2,
+}
+
+out = [0] * 50
+index = 0
+labels = {}
+to_add = []
+
+for line in lines:
+    for instr in line:
+        if instr["type"] == "operation":
+            if instr["op"] in table:
+                out[index] = int(table[instr["op"]])
+                index +=1
+
+                for d in instr["value"]:
+                    if d["type"] == "pointer":
+                        to_add.append({"addr": d["offset"] + index, "label": d["label"] })
+                    if d["type"] == "numeral":
+                        out[index] = d["value"]
+                    index +=1
+
+            if instr["op"] == "data":
+                for d in instr["value"]:
+                    if d["type"] == "pointer":
+                        to_add.append({"addr": d["offset"] + index, "label": d["label"] })
+                    if d["type"] == "numeral":
+                        out[index] = d["value"]
+                    index +=1
+
+        if instr["type"] == "label":
+            labels[instr["value"]]= index
+
+for a in to_add:
+    out[a["addr"]] = labels[a["label"]]
+
+sys.stdout.write(json.dumps(out))
+
