@@ -1,8 +1,8 @@
 let [a, i, x]=[STRING_TO_REPLACE, 0, [
-	x=>alert("BadPass."),
-	x=>x=x.concat(prompt().split`,`.map(x=>+x)),
+	x=>alert`BadPass.`,
+	x=>x.push(...prompt().split`,`.map(x=>+x)),
 	x=>x[50]=8,
-	x=>alert("Good pass !"),
+	x=>alert`Good pass !`,
 ]];
 
 while(a[50]!=8){
