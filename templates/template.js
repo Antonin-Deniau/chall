@@ -7,14 +7,15 @@ x=[
 ];
 
 while (a[0]!=5) {
+    if (a[i] == 7) {console.log(a[a[1+i]], a[a[2+i]])};
     [
       _=>a[0]==1?i=a[++i]-1:i++,        // 0 jeq <addr> TEST [0]
       _=>x[a[++i]](a),                  // 1 int <num>
-      _=>a[i+1]=a[a[++i]]^a[a[++i]],    // 2 xor <a> <b> TO <a>
+      _=>a[a[i+1]]=a[a[++i]]^a[a[++i]], // 2 xor <a> <b> TO <a>
       _=>a[a[++i]]=a[a[++i]],           // 3 mov <a> <b>
       _=>++a[a[++i]],                   // 4 inc <a>
       _=>a[a[++i]]=a[++i],              // 5 set <a> <b>
-      _=>i=a[1+i]-1,                    // 6 jmp <a>
+      _=>i=a[i+1]-1,                    // 6 jmp <a>
       _=>a[0]=a[a[++i]]==a[a[++i]]?1:0, // 7 test <a> <b> TO [0]
     ][a[i]]();
     i++;

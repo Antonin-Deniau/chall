@@ -2,19 +2,14 @@ data 0 ; COMPARE VARIABLE
 
 int 1 ; get password
 
-;0 jeq <addr> TEST [47]
-;1 int <num>
-;2 xor <a> <b> TO [48]
-;3 mov <a> <b>
-;4 inc <a>
-;5 set <a> <b>
-;6 jmp <a>
-;7 test <a> <b> TO [47]
-
 check_loop:
     ; SET TWO CHARS (encoded and input)
     incr_1: mov :cmp_a: :encoded:
     incr_2: mov :cmp_b: 60
+
+    ; aditive xor encoding
+    xor :cmp_b: :iv:
+    mov :iv: :cmp_b:
 
     ; SET NEXT CHAR
     inc :incr_1: + 2
@@ -40,8 +35,9 @@ exit:
     set 0 5
 
 ; VARS " ".join([ord(i) for i in "antonin"])
-encoded: data 97 110 116 111 110 105 110
+encoded: data 36 74 62 81 63 86 56
 passlen: data 7
 counter: data 0
+iv: data 69
 cmp_a: data 0
 cmp_b: data 0
