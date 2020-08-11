@@ -1,7 +1,6 @@
 data 0 ; COMPARE VARIABLE
 
 int 1 ; get password
-set :counter: 0
 
 ;0 jeq <addr> TEST [47]
 ;1 int <num>
@@ -32,14 +31,12 @@ check_loop:
     jeq :check_loop:
 
     ; IF NOT VALID EXIT
-    jmp :invalid:
-
-invalid:
     int 0
-    set 0 5
+    jmp :exit:
 
 valid:
     int 2
+exit:
     set 0 5
 
 ; VARS " ".join([ord(i) for i in "antonin"])
