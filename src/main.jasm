@@ -36,7 +36,7 @@ exit:
 
 ; VARS " ".join([ord(i) for i in "antonin"])
 encoded: data 36 74 62 81 63 86 56
-passlen: data 7
+passlen: data 8
 counter: data 0
 iv: data 69
 cmp_a: data 0
