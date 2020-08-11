@@ -80,7 +80,7 @@ for line in lines:
 
                 for d in instr["value"]:
                     if d["type"] == "pointer":
-                        to_add.append({"addr": d["offset"] + index, "label": d["label"] })
+                        to_add.append({"addr": index, "label": d["label"], "offset": d["offset"] })
                     if d["type"] == "numeral":
                         out[index] = d["value"]
                     index +=1
@@ -88,7 +88,7 @@ for line in lines:
             if instr["op"] == "data":
                 for d in instr["value"]:
                     if d["type"] == "pointer":
-                        to_add.append({"addr": d["offset"] + index, "label": d["label"] })
+                        to_add.append({"addr": index, "label": d["label"], "offset": d["offset"] })
                     if d["type"] == "numeral":
                         out[index] = d["value"]
                     index +=1
@@ -97,7 +97,7 @@ for line in lines:
             labels[instr["value"]]= index
 
 for a in to_add:
-    out[a["addr"]] = labels[a["label"]]
+    out[a["addr"]] = labels[a["label"]] + a["offset"]
 
 sys.stdout.write(json.dumps(out))
 
