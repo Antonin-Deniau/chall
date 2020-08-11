@@ -56,28 +56,17 @@ jmp <a>
 """
 
 table = {
-    "jeq": 1,
-    "xor": 3,
-    "int": 2,
-    "test": 8,
-    "mov": 4,
-    "inc": 5,
-    "set": 6,
-    "jmp": 7,
-}
-
-size = {
-    "jeq": 2,
-    "xor": 3,
-    "int": 2,
-    "test": 3,
+    "jeq": 0,
+    "xor": 2,
+    "int": 1,
+    "test": 7,
     "mov": 3,
-    "inc": 2,
-    "set": 3,
-    "jmp": 2,
+    "inc": 4,
+    "set": 5,
+    "jmp": 6,
 }
 
-out = [0] * 50
+out = [0] * 60
 index = 0
 labels = {}
 to_add = []
