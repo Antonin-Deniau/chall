@@ -1,13 +1,13 @@
+d = _ => {
 a=STRING_TO_REPLACE;
 i=1;
 x=[
 	_=>alert`BadPass.`,
-	_=> _.push(...prompt().split``.map(_=>_.charCodeAt(0))),
+	_=> document.getElementById`d`.value.split``.map(_=>a.push(_.charCodeAt(0))),
 	_=>alert`Good pass !`,
 ];
 
 while (a[0]!=5) {
-    if (a[i] == 7) {console.log(a[a[1+i]], a[a[2+i]])};
     [
       _=>a[0]==1?i=a[++i]-1:i++,        // 0 jeq <addr> TEST [0]
       _=>x[a[++i]](a),                  // 1 int <num>
@@ -19,4 +19,5 @@ while (a[0]!=5) {
       _=>a[0]=a[a[++i]]==a[a[++i]]?1:0, // 7 test <a> <b> TO [0]
     ][a[i]]();
     i++;
+}
 }

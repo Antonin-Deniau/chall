@@ -5,7 +5,7 @@ int 1 ; get password
 check_loop:
     ; SET TWO CHARS (encoded and input)
     incr_1: mov :cmp_a: :encoded:
-    incr_2: mov :cmp_b: 60
+    incr_2: mov :cmp_b: 52
 
     ; aditive xor encoding
     xor :cmp_b: :iv:
@@ -34,7 +34,7 @@ valid:
 exit:
     set 0 5
 
-; VARS " ".join([ord(i) for i in "antonin"])
+; ./encode_pass <plain_pass> <iv>
 encoded: data 36 74 62 81 63 86 56
 passlen: data 8
 counter: data 0
